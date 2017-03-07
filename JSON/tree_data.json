@@ -1,0 +1,37 @@
+[{
+  "id": "1",
+  "type": "folder",
+  "value": "Music",
+  "css": "folder_music",
+  "data": [{
+   "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }]
+}, {
+  "id": "2",
+  "type": "folder",
+  "value": "Music",
+  "css": "folder_music",
+  "data": [{
+    "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }, {
+    "type": "folder",
+    "value": "Music"
+  }]
+}]

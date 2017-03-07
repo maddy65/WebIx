@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+	<html>
+		<head>
+			<link rel="stylesheet" href="../webix_v4.2.4_pro/codebase/webix.css" type="text/css"> 
+			<script src="../webix_v4.2.4_pro/codebase/webix.js" type="text/javascript"></script>
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+			<style>
+				#app_here{
+					width : 1000px; height : 500px, margin : 200px;
+				}
+			</style>
+		
+		</head>
+		<body>
+		<div id = "app_here"></div>	
+			<script type = "text/javascript" charset="utf-8">
+				var gridData = (function() {
+				 var grid_data;
+				  $.ajax({
+					url: "grid_data.json",
+					success: function(result) {
+					 grid_data = result;
+					}
+				  });
+
+				  return {
+					getData: function() {
+					  if (grid_data) return grid_data;
+					}
+				  }
+				})();
+
+				var treeData = (function() {
+				var tree_data;
+				  $.ajax({
+					url: "tree_data.json",
+					success: function(result) {
+					 tree_data = result;
+					}
+				  });
+
+				  return {
+					getData: function() {
+					  if (tree_data) return tree_data;
+					}
+				  }
+				})(); 
+				webix.ready(function(){
+					webix.ui({
+						container : "app_here",
+						width : 1000,
+						height : 500,
+						view : "layout",
+						rows:[
+							{type : "header", template : "My App!"},
+							{cols :[
+							 {view : "tree", id :"mytree", gravity : 0.3, select : true, data : treeData.getData()},
+							 {view : "resizer"},
+							 {view : "datatable",
+							 
+							 id : "mydatatable",
+							 columns:[
+								{ id:"title",   header:["Title", {content:"textFilter"}], sort:"string", width:380, },
+								{ id:"year",    header:["Year",  {content:"selectFilter"} ], sort:"int", width:150},
+								{ id:"votes",  header:"Votes",     sort:"int", width:60},
+								{ id:"rating", header:"Rating",     sort:"int", width:60},
+								{ id:"rank",   header:"Rank",     sort:"int", width:180}
+							],
+							autoConfig : true,
+							data : gridData.getData(),
+							}
+						]}
+						]
+					});
+				});
+			</script>
+		</body>
+	</html>
