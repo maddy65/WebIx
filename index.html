@@ -1,78 +1,125 @@
-<!DOCTYPE HTML>
-	<html>
-		<head>
-			<link rel="stylesheet" href="../webix_v4.2.4_pro/codebase/webix.css" type="text/css"> 
-			<script src="../webix_v4.2.4_pro/codebase/webix.js" type="text/javascript"></script>
-			<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-			<style>
-				#app_here{
-					width : 1000px; height : 500px, margin : 200px;
-				}
-			</style>
-		
-		</head>
-		<body>
-		<div id = "app_here"></div>	
-			<script type = "text/javascript" charset="utf-8">
-				var gridData = (function() {
-				 var grid_data;
-				  $.ajax({
-					url: "grid_data.json",
-					success: function(result) {
-					 grid_data = result;
-					}
-				  });
+<!DOCTYPE html>
 
-				  return {
-					getData: function() {
-					  if (grid_data) return grid_data;
-					}
-				  }
-				})();
+<html>
+	<head>
+		<link rel="stylesheet" href="../webix_v4.2.4_pro/codebase/webix.css" type="text/css"> 
+		<script src="../webix_v4.2.4_pro/codebase/webix.js" type="text/javascript"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+	<body>
+		<div id="testA" style="width:600px; height:500px; margin:10px;"></div>
+		<script>
+			var gridData = (function() {
+					 var grid_data;
+					  $.ajax({
+						url: "grid_data.json",
+						success: function(result) {
+						 grid_data = result;
+						}
+					  });
 
-				var treeData = (function() {
-				var tree_data;
-				  $.ajax({
-					url: "tree_data.json",
-					success: function(result) {
-					 tree_data = result;
-					}
-				  });
-
-				  return {
-					getData: function() {
-					  if (tree_data) return tree_data;
-					}
-				  }
-				})(); 
-				webix.ready(function(){
-					webix.ui({
-						container : "app_here",
-						width : 1000,
-						height : 500,
-						view : "layout",
-						rows:[
-							{type : "header", template : "My App!"},
-							{cols :[
-							 {view : "tree", id :"mytree", gravity : 0.3, select : true, data : treeData.getData()},
-							 {view : "resizer"},
-							 {view : "datatable",
-							 
-							 id : "mydatatable",
+					  return {
+						getData: function() {
+						  if (grid_data) return grid_data;
+						}
+					  }
+					})();															
+			webix.ready(function(){
+				webix.ui({
+					container:"testA",
+					type:"line",
+					width : 1000,
+					//scroll:"x",
+					rows:[
+						{view : "toolbar", id:"mybar", elements:[
+							{view : "button", value : "Add", width:70, click: add_row},
+							{view : "button", value : "Delete", width:70, click: delete_row},
+							{view : "button", value : "Update", width:70, click: update_row},
+							{view : "button", value : "Clear", width:70, click:"$$('myform').clear()"},
+						]},
+						{view: "toolbar", id:"myform",width: 3000, elements:[
+							{view: "text", name: "title", placeholder:"title", width: 370 },
+							{view: "text", name: "year", placeholder:"year", width: 150},
+							{view: "text", name: "votes", placeholder:"votes", width: 75 },
+							{view: "text", name: "rating", placeholder:"rating", width: 75},
+							{view: "text", name: "rank", placeholder:"rank", width: 80 },
+							{view: "text", name: "award", placeholder:"award", width: 80 },
+							{view: "text", name: "customer", placeholder:"customer", width: 80 },
+							{view: "text", name: "country", placeholder:"country", width: 80 },
+							{view: "text", name: "roll", placeholder:"roll", width: 80 },
+							{view: "text", name: "capital", placeholder:"capital", width: 80 },
+							{view: "text", name: "office", placeholder:"office", width: 80 },
+							{view: "text", name: "time", placeholder:"time", width: 80 }
+							
+							]
+						},
+						{view : "datatable",
+							id : "mylist",
+							select: true,
+							autoConfig:true,
+							editable:true,
 							 columns:[
-								{ id:"title",   header:["Title", {content:"textFilter"}], sort:"string", width:380, },
-								{ id:"year",    header:["Year",  {content:"selectFilter"} ], sort:"int", width:150},
-								{ id:"votes",  header:"Votes",     sort:"int", width:60},
-								{ id:"rating", header:"Rating",     sort:"int", width:60},
-								{ id:"rank",   header:"Rank",     sort:"int", width:180}
+								{ id:"title",   header:"Title",  sort:"string", width:380,editable:true , editor:"text"},
+								{ id:"year",    header:"Year",  sort:"int", width:150, editor:"text"},
+								{ id:"votes",  header:"Votes",     sort:"int", width:80, editor:"text"},
+								{ id:"rating", header:"Rating",     sort:"int", width:80, editor:"text"},
+								{ id:"rank",   header:"Rank",     sort:"int", width:80, editor:"text"},
+								{ id:"award",   header:"Award",     sort:"int", width:80, editor:"text"},
+								{ id:"customer",   header:"Customer",  sort:"int", width:80, editor:"text"},
+								{ id:"country",   header:"Country",     sort:"int", width:80, editor:"text"},
+								{ id:"roll",   header:"Roll",     sort:"int", width:80, editor:"text"},
+								{ id:"capital",   header:"Capital",     sort:"int", width:180, editor:"text"},
+								{ id:"office",   header:"Office",     sort:"int", width:180, editor:"text"},
+								{ id:"time",   header:"Time",     sort:"int", width:180, editor:"text"}
 							],
 							autoConfig : true,
+							leftSplit:2,
+							dragColumn:true,
 							data : gridData.getData(),
 							}
-						]}
-						]
-					});
+					]
 				});
-			</script>
-		</body>
-	</html>
+			});
+			function add_row(){
+				$$("mylist").add({
+					title: $$("myform").getValues().title,
+					year: $$("myform").getValues().year,
+					votes: $$("myform").getValues().votes,
+					rating: $$("myform").getValues().rating,
+					rank: $$("myform").getValues().rank,
+				})
+			}
+			
+			function update_row(){
+				var sel = $$("mylist").getSelectedId();
+				if(!sel) return
+				
+				var value1 = $$("myform").getValues().title;
+				var value2 = $$("myform").getValues().year;
+				var value3 = $$("myform").getValues().votes;
+				var value4 = $$("myform").getValues().rating;
+				var value5 = $$("myform").getValues().rank;
+				
+				var item = $$("mylist").getItem(sel);
+				item.title = value1;
+				item.year = value2;
+				item.votes = value3;
+				item.rating = value4;
+				item.rank = value5;
+				
+				$$("mylist").updateItem(sel,item);
+			}
+			
+			function delete_row(){
+				var id= $$("mylist").getSelectedId();
+				webix.confirm({
+					title: "Delete",
+					text: "Are you sure ?",
+					callback: function(result){
+						$$("mylist").remove(id);
+					} 
+				});
+			}
+		</script>
+	</body>
+</html>
